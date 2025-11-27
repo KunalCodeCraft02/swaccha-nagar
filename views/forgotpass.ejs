@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.7.0/fonts/remixicon.css" rel="stylesheet" />
+    <link rel="stylesheet" href="/css/login.css">
+</head>
+    
+
+<body>
+    <main>
+        <div id="page1">
+          
+            <div class="container">
+                <div class="heading">Forget <span>Password</span></div>
+                <form action="/forgetpass" method="post" class="form">
+                    <input required="" class="input" type="email" name="email" id="email" placeholder="E-mail">
+                    <!-- <span class="forgot-password"><a href="#">Forgot Password ?</a></span> -->
+                    <input required="" class="input" type="password" name="password" id="password"
+                        placeholder="Password">
+                    <input required="" class="input" type="password" name="confirmpassword" id="password"
+                        placeholder="Confirm Password">
+                    <input class="login-button" type="submit" value="Sign In">
+
+                </form>
+                <div class="social-account-container">
+                  
+                    <div class="social-accounts">
+                       
+                    </div>
+                </div>
+                <span class="agreement"><a href="/userlogin">Login </a></span>
+            </div>
+        </div>
+    </main>
+    <script src="/js/script.js"></script>
+    <script>
+        // Check for error in URL query parameters and show alert
+        const urlParams = new URLSearchParams(window.location.search);
+        const error = urlParams.get('error');
+        if (error) {
+            alert(error);
+            // Remove error from URL after showing alert
+            window.history.replaceState({}, document.title, window.location.pathname);
+        }
+    </script>
+</body>
+
+</html>

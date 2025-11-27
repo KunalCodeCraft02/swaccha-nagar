@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.7.0/fonts/remixicon.css" rel="stylesheet" />
+    <link rel="stylesheet" href="/css/createteam.css">
+    <title>Document</title>
+</head>
+<body>
+    <main>
+        <div id="page1">
+            <nav>
+                <div class="logon">
+                 <h1>SNNC 2025</h1>
+                </div>
+                <div class="links">
+                    <a href="/addmember">Add Members <i class="ri-user-add-fill"></i></a>
+                    <a href="/Logout">Logout <i class="ri-arrow-right-fill"></i></a>
+                </div>
+               
+            </nav>
+        </div>
+        <div id="page2">
+            <section class="team-section">
+
+                <div class="team-card">
+            
+                    <h2 class="team-heading">Your Team</h2>
+            
+                    <div class="team-logo">
+                        <img src="/images/logo.png" alt="">
+                    </div>
+            
+                    <h2 class="team-name"><%= user && user.teamname ? user.teamname : "Your Team Name" %></h2>
+            
+                    <div class="team-info-box">
+                        Team Email: <%= user && user.email ? user.email : "Not available" %><br>
+                        Contact Number: <%= user && user.phoneno ? user.phoneno : "Not available" %>
+                    </div>
+            
+                    <hr class="divider">
+            
+                    <h2 class="team-heading">Team Members</h2>
+            
+                    <div class="members-grid">
+                        <% if (members && members.length) { %>
+                            <% members.forEach(function(member) { %>
+                                <div class="member-box">
+                                    <div class="avatar"><%= member.name ? member.name.charAt(0).toUpperCase() : "?" %></div>
+                                    <p class="member-name"><%= member.name %></p>
+                                    <!-- <p class="member-detail"><%= member.email %></p> -->
+                                    <p class="member-detail"><%= member.phone %></p>
+                                </div>
+                            <% }) %>
+                        <% } else { %>
+                            <p class="empty-state">No members added yet. Use the Add Members button to get started.</p>
+                        <% } %>
+                    </div>
+            
+                </div>
+            
+            </section>
+            
+        </div>
+    </main>
+</body>
+</html>

@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.7.0/fonts/remixicon.css" rel="stylesheet" />
+    <link rel="stylesheet" href="/css/task1.css">
+    <script src="/js/taskUploadManager.js"></script>
+    <title>Document</title>
+</head>
+
+<body>
+    <main>
+        <div id="page1">
+            <nav>
+                <div class="logon">
+                    <img src="/images/logo.png" alt="">
+                </div>
+                <div class="links">
+                    <a href="#">About</a>
+                    <div class="dropdown">
+                        <a href="#" class="dropdown-toggle" id="trackDropdown">
+                            Track <i class="ri-arrow-down-s-line"></i>
+                        </a>
+                        <div class="dropdown-menu" id="trackMenu">
+                            <a href="/solotask" class="dropdown-item">Solo</a>
+                            <a href="/teamtrack" class="dropdown-item">Team</a>
+                        </div>
+                    </div>
+                    <a href="/mentor">Mentor</a>
+                    <a href="/associate">Associate</a>
+                </div>
+                <div class="btns">
+
+                    <a href="/logout"><button>Logout <i class="ri-arrow-right-fill"></i></button></a>
+                </div>
+            </nav>
+        </div>
+        <div id="page2">
+            <div class="task-page">
+
+                <!-- Banner Section -->
+                <div class="banner">
+                    <div class="banner-img">
+                        <!-- Add your image here -->
+                        <!-- <img src="your-image.jpg" alt=""> -->
+                    </div>
+                    <h1 class="banner-title">The "My Clean Corner" Initiative</h1>
+                </div>
+
+
+                <div class="content-area">
+
+                    <!-- Left Content -->
+                    <div class="left-panel">
+
+                        <div class="card">
+                            <h2 class="card-title">Description</h2>
+                            <p>
+                                The team must ensure that every participating household identifies, cleans, and
+                                maintains a "publicly visible corner" in their immediate vicinity (e.g., staircase
+                                landing, society gate area, a small roadside patch) for a period of seven consecutive
+                                days. This fosters daily, individual ownership
+                            </p>
+
+                        </div>
+
+                        <div class="card">
+                            <h2 class="card-title">Guidelines</h2>
+                            <p>
+                                <i class="ri-arrow-right-circle-line"></i>How to Execute the Task: Before/After photos must be taken for the collective effort. <br>
+                                <i class="ri-arrow-right-circle-line"></i>The action must involve different team members taking ownership of different corners. <br>
+
+                                <i class="ri-arrow-right-circle-line"></i>Submission Guidelines: Submission via PPT showing a photo gallery of "Before and After"
+                                images for at least 80% of participating households, labeled by corner location. <br>
+
+                                Final Point Checklist: <br>  <i class="ri-arrow-right-circle-line"></i> Photo proof of 80%+ household participation. <br>  <i class="ri-arrow-right-circle-line"></i> Clear visual
+                                difference in the "After" photos.
+
+                                Marking Scheme: <br>
+
+                                <strong>Team</strong>: 150 Pts for photo documentation; 100 Pts for documented 7-day maintenance log. <br>
+
+                                <strong>Solo</strong>: 150 Pts for Before/After photos of one corner; 50 Pts for the 7-day monitoring
+                                log.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Right Sidebar -->
+                    <div class="right-panel">
+
+                        <div class="card small">
+                            <h2 class="card-title">Task Status</h2>
+                            <p><strong>Deadline:</strong> <span class="badge">15 March 2026</span></p>
+                            <p><strong>MAX Points:</strong> <span class="badge">150</span></p>
+                            <p><strong>Current submission:</strong> <button class="view-btn"
+                                    id="viewSubmissionBtn">View</button></p>
+                        </div>
+
+                        <!-- <div class="card small">
+                            <h2 class="card-title">Feedback</h2>
+                            <p>Good work</p>
+                        </div> -->
+
+                        <div class="upload-box" id="uploadBox">
+                            <input type="file" id="fileInput" accept="application/pdf">
+
+                            <div class="upload-icon">⬆</div>
+                            <p id="uploadText">Choose a file or drag it here</p>
+                            <span>PDF files only (max 10MB)</span>
+                        </div>
+
+                        <p id="fileName" class="file-name"></p>
+
+                        <button id="submitBtn" class="submit-btn" disabled>Submit Task</button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+    </main>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const trackDropdown = document.getElementById("trackDropdown");
+            const dropdown = document.querySelector(".dropdown");
+
+            if (trackDropdown && dropdown) {
+                trackDropdown.addEventListener("click", (e) => {
+                    e.preventDefault();
+                    dropdown.classList.toggle("active");
+                });
+
+                // Close dropdown when clicking outside
+                document.addEventListener("click", (e) => {
+                    if (!dropdown.contains(e.target)) {
+                        dropdown.classList.remove("active");
+                    }
+                });
+            }
+
+            // Initialize task upload manager
+            new TaskUploadManager("task2point1");
+        });
+
+
+
+    </script>
+</body>
+
+</html>

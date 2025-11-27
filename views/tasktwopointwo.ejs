@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.7.0/fonts/remixicon.css" rel="stylesheet" />
+    <link rel="stylesheet" href="/css/task1.css">
+    <script src="/js/taskUploadManager.js"></script>
+    <title>Document</title>
+</head>
+
+<body>
+    <main>
+        <div id="page1">
+            <nav>
+                <div class="logon">
+                    <img src="/images/logo.png" alt="">
+                </div>
+                <div class="links">
+                    <a href="#">About</a>
+                    <div class="dropdown">
+                        <a href="#" class="dropdown-toggle" id="trackDropdown">
+                            Track <i class="ri-arrow-down-s-line"></i>
+                        </a>
+                        <div class="dropdown-menu" id="trackMenu">
+                            <a href="/solotask" class="dropdown-item">Solo</a>
+                            <a href="/teamtrack" class="dropdown-item">Team</a>
+                        </div>
+                    </div>
+                    <a href="/mentor">Mentor</a>
+                    <a href="/associate">Associate</a>
+                </div>
+                <div class="btns">
+
+                    <a href="/logout"><button>Logout <i class="ri-arrow-right-fill"></i></button></a>
+                </div>
+            </nav>
+        </div>
+        <div id="page2">
+            <div class="task-page">
+
+                <!-- Banner Section -->
+                <div class="banner">
+                    <div class="banner-img">
+                        <!-- Add your image here -->
+                        <!-- <img src="your-image.jpg" alt=""> -->
+                    </div>
+                    <h1 class="banner-title">Swachh Vendor Promotion & Audit</h1>
+                </div>
+
+
+                <div class="content-area">
+
+                    <!-- Left Content -->
+                    <div class="left-panel">
+
+                        <div class="card">
+                            <h2 class="card-title">Description</h2>
+                            <p>
+                                Address the problem of plastic usage by promoting good business practices. Teams must
+                                identify five local shops/vendors in their area that actively avoid or have
+                                significantly reduced single-use plastic. Create promotional social media content to
+                                celebrate these vendors as "Swachh Mitra Vendors" and encourage the community to support
+                                them.
+                            </p>
+
+                        </div>
+
+                        <div class="card">
+                            <h2 class="card-title">Guidelines</h2>
+                            <p>
+                                <i class="ri-arrow-right-circle-line"></i> How to Execute the Task: Interview the vendor briefly about their plastic reduction
+                                measures. <br>  <i class="ri-arrow-right-circle-line"></i> The social media post must tag the vendor (if possible) and use a photo of the
+                                team/solo participant with the vendor. <br>
+
+                                <i class="ri-arrow-right-circle-line"></i> Submission Guidelines: Submission via PDF document. <br>
+
+                                Final Point Checklist: <br>  <i class="ri-arrow-right-circle-line"></i> Links to five distinct promotional posts (one per vendor). <br>  <i class="ri-arrow-right-circle-line"></i>
+                                Brief description of how each vendor reduces plastic. <br>
+
+                                <i class="ri-arrow-right-circle-line"></i> Marking Scheme: <br>
+
+                                <strong>Team</strong>: 150 Pts for 5 high-quality, verifiable social media posts. <br>
+
+                                <strong>Solo</strong>: 100 Pts for 3 high-quality, verifiable social media posts.
+                            </p>
+                            
+                        </div>
+
+                    </div>
+
+
+                    <!-- Right Sidebar -->
+                    <div class="right-panel">
+
+                        <div class="card small">
+                            <h2 class="card-title">Task Status</h2>
+                            <p><strong>Deadline:</strong> <span class="badge">15 March 2026</span></p>
+                            <p><strong>MAX Points:</strong> <span class="badge">100</span></p>
+                            <p><strong>Current submission:</strong> <button class="view-btn"
+                                    id="viewSubmissionBtn">View</button></p>
+                        </div>
+
+                        <!-- <div class="card small">
+                            <h2 class="card-title">Feedback</h2>
+                            <p>Good work</p>
+                        </div> -->
+
+                        <div class="upload-box" id="uploadBox">
+                            <input type="file" id="fileInput" accept="application/pdf">
+
+                            <div class="upload-icon">⬆</div>
+                            <p id="uploadText">Choose a file or drag it here</p>
+                            <span>PDF files only (max 10MB)</span>
+                        </div>
+
+                        <p id="fileName" class="file-name"></p>
+
+                        <button id="submitBtn" class="submit-btn" disabled>Submit Task</button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+    </main>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const trackDropdown = document.getElementById("trackDropdown");
+            const dropdown = document.querySelector(".dropdown");
+
+            if (trackDropdown && dropdown) {
+                trackDropdown.addEventListener("click", (e) => {
+                    e.preventDefault();
+                    dropdown.classList.toggle("active");
+                });
+
+                // Close dropdown when clicking outside
+                document.addEventListener("click", (e) => {
+                    if (!dropdown.contains(e.target)) {
+                        dropdown.classList.remove("active");
+                    }
+                });
+            }
+
+            // Initialize task upload manager
+            new TaskUploadManager("task2pointwo");
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.7.0/fonts/remixicon.css" rel="stylesheet" />
+    <link rel="stylesheet" href="/css/addmember.css">
+    <title>Document</title>
+</head>
+
+<body>
+    <main>
+        <!-- From Uiverse.io by Yaya12085 -->
+        <% const errorMessage = typeof error === "undefined" ? null : error; %>
+        <% const successMessage = typeof success === "undefined" ? null : success; %>
+        <% if (errorMessage) { %>
+            <div class="alert error"><%= errorMessage %></div>
+        <% } %>
+        <% if (successMessage) { %>
+            <div class="alert success"><%= successMessage %></div>
+        <% } %>
+        <form class="form" action="/addmember" method="POST">
+            <p class="title">ADD MEMBER </p>
+            <p class="message">Fill out detail of your team Member</p>
+            <div class="flex">
+                <label>
+                    <input required="" placeholder="" type="text" class="input" name="name">
+                    <span>Firstname</span>
+                </label>
+
+                <label>
+                    <input required="" placeholder="" type="text" class="input" name="phone">
+                    <span>Number</span>
+                </label>
+            </div>
+
+            <label>
+                <input required="" placeholder="" type="email" class="input" name="email">
+                <span>Email</span>
+            </label>
+
+            <label>
+                <input placeholder="" type="email" class="input" name="leaderEmail">
+                <span>Leader Email</span>
+            </label>
+            <!-- <label>
+                <input required="" placeholder="" type="password" class="input">
+                <span>Confirm password</span>
+            </label> -->
+            <button class="submit">Submit</button>
+            <!-- <p class="signin">Already have an acount ? <a href="#">Signin</a> </p> -->
+        </form>
+    </main>
+</body>
+
+</html>

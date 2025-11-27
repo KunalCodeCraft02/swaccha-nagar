@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.7.0/fonts/remixicon.css" rel="stylesheet" />
+    <link rel="stylesheet" href="/css/ragister.css">
+    <title>Document</title>
+</head>
+
+<body>
+    <main>
+        <div id="page1">
+        
+            <div class="container">
+                <div class="heading">Registration</div>
+                <form action="/ragister" method="post" class="form">
+                    <input required="" class="input" type="email" name="email" id="email" placeholder="Leader E-mail">
+                    <input required="" class="input" type="password" name="password" id="password"
+                    placeholder="Password">
+                    <input required="" class="input" type="password" name="confirmPassword" id="confirmPassword"
+                    placeholder="Confirm Password">
+                    <input required="" class="input" type="text" name="teamname" id="teamname" placeholder="Team name">
+                    <input required="" class="input" type="number" name="phoneno" id="phoneno" placeholder="Phone No">
+                   
+                    <div id="password-strength" class="password-strength" style="display: none;"></div>
+                    <input class="login-button" type="submit" value="Register">
+
+                </form>
+                <div class="social-account-container">
+                    
+                </div>
+                <span class="agreement"><a href="/userlogin">Have account? Login</a></span>
+            </div>
+        </div>
+    </main>
+    <script>
+        // Password strength checker
+        const passwordInput = document.getElementById('password');
+        const passwordStrength = document.getElementById('password-strength');
+        
+        passwordInput.addEventListener('input', function() {
+            const password = passwordInput.value;
+            
+            if (password.length === 0) {
+                passwordStrength.style.display = 'none';
+                return;
+            }
+            
+            passwordStrength.style.display = 'block';
+            
+            let strength = checkPasswordStrength(password);
+            passwordStrength.textContent = strength.text;
+            passwordStrength.className = 'password-strength ' + strength.class;
+        });
+        
+        function checkPasswordStrength(password) {
+            let strength = 0;
+            
+            // Length check
+            if (password.length >= 8) strength++;
+            if (password.length >= 12) strength++;
+            
+            // Character variety checks
+            if (/[a-z]/.test(password)) strength++;
+            if (/[A-Z]/.test(password)) strength++;
+            if (/[0-9]/.test(password)) strength++;
+            if (/[^a-zA-Z0-9]/.test(password)) strength++;
+            
+            if (strength <= 2) {
+                return { text: 'Easy Password', class: 'easy' };
+            } else if (strength <= 4) {
+                return { text: 'Medium Password', class: 'medium' };
+            } else {
+                return { text: 'Strong Password', class: 'strong' };
+            }
+        }
+        
+        // Phone number validation
+        const phoneInput = document.getElementById('phoneno');
+        
+        phoneInput.addEventListener('input', function() {
+            const phoneNumber = phoneInput.value;
+            
+            // Remove any non-digit characters
+            const digitsOnly = phoneNumber.replace(/\D/g, '');
+            
+            // If more than 10 digits, show alert and limit to 10
+            if (digitsOnly.length > 10) {
+                alert('Phone number should be exactly 10 digits!');
+                phoneInput.value = digitsOnly.substring(0, 10);
+            } else {
+                phoneInput.value = digitsOnly;
+            }
+        });
+        
+        // Prevent form submission if phone number is not exactly 10 digits
+        document.querySelector('.form').addEventListener('submit', function(e) {
+            const phoneNumber = phoneInput.value.replace(/\D/g, '');
+            if (phoneNumber.length !== 10) {
+                e.preventDefault();
+                alert('Phone number must be exactly 10 digits!');
+                return false;
+            }
+        });
+    </script>
+</body>
+
+</html>

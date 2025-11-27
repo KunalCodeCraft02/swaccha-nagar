@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.7.0/fonts/remixicon.css" rel="stylesheet" />
+    <link rel="stylesheet" href="/css/teamtrack.css">
+    <title>Solo-Task</title>
+</head>
+<body>
+   <main>
+    <div id="page1">
+        <nav>
+            <div class="logon">
+                <img src="/images/logo.png" alt="">
+            </div>
+            <div class="links">
+                <a href="#">About</a>
+                <div class="dropdown">
+                    <a href="#" class="dropdown-toggle" id="trackDropdown">
+                        Track <i class="ri-arrow-down-s-line"></i>
+                    </a>
+                    <div class="dropdown-menu" id="trackMenu">
+                        <a href="/solotask" class="dropdown-item">Solo</a>
+                        <a href="/teamtrack" class="dropdown-item">Team</a>
+                    </div>
+                </div>
+                <a href="/mentor">Mentor</a>
+                <a href="/associate">Associate</a>
+            </div>
+            <div class="btns">
+                <a href="/logout"><button>Logout <i class="ri-arrow-right-fill"></i></button></a>
+            </div>
+        </nav>
+    </div>
+    <div id="page2">
+        <div class="hero-left">
+            <h1>SOLO TRACK</h1>
+            <h4><i>"Be the change that you wish to see in the world!"</i></h4>
+            <span>~ Mahatma Gandhi</span>
+        </div>
+        <div class="hero-right">
+            <img src="https://www.ecell.in/nec/assets/img/basic-hero.png" alt="">
+        </div>
+    </div>
+    <div id="page3">
+        <div class="container">
+            <h1>Tasks</h1>
+        
+            <!-- Tabs -->
+            <div class="tabs">
+                <div class="tab active" onclick="switchTab(event, 'preliminary')">Swacch Aarambh</div>
+                <div class="tab" onclick="switchTab(event, 'ignite')">Swa-Swachhata Sankalp</div>
+                <div class="tab" onclick="switchTab(event, 'venture')"> Ground Work Upakram</div>
+                <div class="tab" onclick="switchTab(event, 'bonus')"> Vibhajan Vichar</div> 
+            </div>
+        
+            <!-- Preliminary Section -->
+            <div id="preliminary" class="tasks active">
+                <div class="task-card">
+                    <div class="task-title">Enrollment & Referral Drive</div>
+                    <p>Deadline: 15 Feb 2026</p>
+                    <p>Points: Max 100 Pts</p>
+                    <a href="/task1" class="details-btn">View Details →</a>
+                </div>
+        
+                <div class="task-card">
+                    <div class="task-title">Kolhapur Clean Pledge</div>
+                    <p>Deadline: 15 Feb 2026</p>
+                    <p>Points: Max 150 Pts</p>
+                    <a href="/task2" class="details-btn">View Details →</a>
+                </div>
+        
+                <div class="task-card">
+                    <div class="task-title"> Road Safety and Pothole Mapping</div>
+                    <p>Deadline: 15 Feb 2026</p>
+                    <p>Points: Max 100 Pts</p>
+                    <a href="/task3" class="details-btn">View Details →</a>
+                </div>
+            </div>
+        
+            <!-- Ignite Propel Section -->
+            <div id="ignite" class="tasks">
+                <div class="task-card">
+                    <div class="task-title"> The "My Clean Corner" Initiative </div>
+                    <p>Deadline: 15 March 2026</p>
+                    <p>Points: Max 200 Pts</p>
+                    <a href="/tasktwopointone" class="details-btn">View Details →</a>
+                </div>
+        
+                <div class="task-card">
+                    <div class="task-title">Swachh Vendor Promotion & Audit</div>
+                    <p>Deadline: 15 March 2026</p>
+                    <p>Points: Max 100 Pts</p>
+                    <a href="/tasktwopointwo" class="details-btn">View Details →</a>
+                </div>
+        
+                <div class="task-card">
+                    <div class="task-title">Community Pledge on Plastic Reduction</div>
+                    <p>Deadline: 15 March 2026</p>
+                    <p>Points: Max 100 Pts</p>
+                    <a href="/tasktwopointhree" class="details-btn">View Details →</a>
+                </div>
+                <div class="task-card">
+                    <div class="task-title"> E-Waste Collection Awareness Drive</div>
+                    <p>Deadline: 15 March 2026</p>
+                    <p>Points: Max 50 Pts</p>
+                    <a href="/tasktwopointfour" class="details-btn">View Details →</a>
+                </div>
+            </div>
+        
+            <!-- Venture Quest Section -->
+            <div id="venture" class="tasks">
+                <div class="task-card">
+                    <div class="task-title">Ganpati Visarjan Water Body Protection Blitz</div>
+                    <p>Deadline: 20 May 2026</p>
+                    <p>Points: 300</p>
+                    <a href="/taskfourpointone" class="details-btn">View Details →</a>
+                </div>
+        
+                <div class="task-card">
+                    <div class="task-title">Infrastructure Improvement & Monitoring</div>
+                    <p>Deadline: 20 May 2026</p>
+                    <p>Points: 150</p>
+                    <a href="/taskfourpointwo" class="details-btn">View Details →</a>
+                </div>
+            </div>
+        
+            <!-- Bonus Section -->
+            <div id="bonus" class="tasks">
+                <div class="task-card">
+                    <div class="task-title"> Wet & Dry Bin Usage Compliance Audit</div>
+                    <p>Deadline: 20 April 2026</p>
+                    <p>Points: 200</p>
+                    <a href="/taskthreepointone" class="details-btn">View Details →</a>
+                </div>
+        
+                <div class="task-card">
+                    <div class="task-title">Community Composting Solution Implementation</div>
+                    <p>Deadline: 20 April 2026</p>
+                    <p>Points: 200</p>
+                    <a href="/taskthreepointwo" class="details-btn">View Details →</a>
+                </div>
+
+                <div class="task-card">
+                  <div class="task-title">Certified Recycler Connection</div>
+                  <p>Deadline:  20 April 2026</p>
+                  <p>Points: 50</p>
+                  <a href="/taskthreepointhree" class="details-btn">View Details →</a>
+              </div>
+            </div>
+        </div>
+        
+    </div>
+    <div id="page4">
+        <div class="guidlines">
+            <div class="guide-heading">
+              <h1>Guidlines</h1>
+            </div>
+            <section class="faq-container1">
+              
+              <div class="faq-item1">
+                <button class="faq-question1">
+                  <i class="ri-arrow-drop-right-line"></i>
+                  Register individually with accurate personal and area details.
+                  <!-- <span class="faq-icon">+</span> -->
+                </button>
+                
+              </div>
+          
+              <div class="faq-item1">
+                <button class="faq-question1">
+                  <i class="ri-arrow-drop-right-line"></i>
+                  Must complete assigned cleanliness tasks within the given timeline.
+                  <!-- <span class="faq-icon">+</span> -->
+                </button>
+                
+              </div>
+          
+              <div class="faq-item1">
+                <button class="faq-question1">
+                  <i class="ri-arrow-drop-right-line"></i>
+                 Submit before–after photos/videos as proof of work.
+                  <!-- <span class="faq-icon">+</span> -->
+                </button>
+                
+              </div>
+          
+              <div class="faq-item1">
+                <button class="faq-question1">
+
+                  <i class="ri-arrow-drop-right-line"></i>
+                  Must follow safety rules (gloves, masks, proper handling of waste). 
+                  <!-- <span class="faq-icon">+</span> -->
+                </button>
+                
+              </div>
+              <div class="faq-item1">
+                <button class="faq-question1">
+                  <i class="ri-arrow-drop-right-line"></i>
+                  Participants must work only within their assigned location/area.
+                  <!-- <span class="faq-icon">+</span> -->
+                </button>
+                
+              </div>
+              <div class="faq-item1">
+                <button class="faq-question1">
+                  <i class="ri-arrow-drop-right-line"></i>
+                  Maintain ethical conduct—no littering to increase workload.
+                  <!-- <span class="faq-icon">+</span> -->
+                </button>
+                
+              </div>
+              <div class="faq-item1">
+                <button class="faq-question1">
+                  <i class="ri-arrow-drop-right-line"></i>
+                  Present your work during final evaluation (photos, report, short explanation).
+                  <!-- <span class="faq-icon">+</span> -->
+                </button>
+                
+              </div>
+              <div class="faq-item1">
+                <button class="faq-question1">
+                  <i class="ri-arrow-drop-right-line"></i>
+                  Must follow instructions given by mentors or municipal officers.
+                  <!-- <span class="faq-icon">+</span> -->
+                </button>
+                
+              </div>
+             
+            </section>
+          </div>
+    </div>
+    <div id="page10">
+        <footer class="footer">
+          <div class="footer-container">
+        
+            <!-- Logo + tagline -->
+            <div class="footer-section">
+              <h2 class="logo"><img src="/images/logo.png" alt=""></h2>
+              <h3 class="title">SWACHHA BRIGADE<br>KOLHAPUR </h3>
+              <p class="tagline">CREATING JOB CREATORS</p>
+            </div>
+        
+            <!-- Quick Links -->
+            <div class="footer-section">
+              <h3 class="heading">QUICK LINKS</h3>
+              <ul class="links">
+                <li>About</li>
+                <li>Team</li>
+                <li>Mentor</li>
+                <li>Contact</li>
+                <li>Rigistration</li>
+              </ul>
+            </div>
+        
+            <!-- Reach us -->
+            <div class="footer-section">
+              <h3 class="heading">REACH US</h3>
+              <p>gcoe kolhapur,<br>
+                 vidya nagar,<br>
+                 old pune banglore highway<br>
+                 kolhapur, India
+              </p>
+            </div>
+        
+            <!-- Contact + Social -->
+            <div class="footer-section">
+              <h3 class="heading">CONTACT US</h3>
+              <p><a href="mailto:nec@ecell.in">nec@ecell.in</a></p>
+        
+              <h3 class="heading">FOLLOW US</h3>
+              <div class="social-icons">
+                <span>🔗</span>
+                <span>📸</span>
+                <span>✖️</span>
+                <span>▶️</span>
+                <span>📘</span>
+              </div>
+            </div>
+          </div>
+        
+          <div class="copyright">
+            © 2025 SNNC. All rights reserved.
+          </div>
+        </footer>
+        
+      </div>
+   </main>
+
+    <script src="/js/script.js"></script>
+    <script>
+        function switchTab(evt, tabName) {
+        // Hide all sections
+        document.querySelectorAll(".tasks").forEach(div => div.classList.remove("active"));
+
+        // Remove active tab highlight
+        document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
+
+        // Show the selected section
+        document.getElementById(tabName).classList.add("active");
+
+        // Highlight clicked tab
+        if (evt && evt.currentTarget) {
+            evt.currentTarget.classList.add("active");
+        }
+    }
+    </script>
+</body>
+</html>

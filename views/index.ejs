@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.7.0/fonts/remixicon.css" rel="stylesheet" />
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+    <div id="page1">
+        <nav>
+            <div class="logon">
+                <img src="/images/logo.png" alt="">
+            </div>
+            <div class="links">
+                <a href="#page3">About</a>
+                <div class="dropdown">
+                    <a href="#" class="dropdown-toggle" id="trackDropdown">
+                        Track <i class="ri-arrow-down-s-line"></i>
+                    </a>
+                    <div class="dropdown-menu" id="trackMenu">
+                        <a href="/solotask" class="dropdown-item">Solo</a>
+                        <a href="/teamtrack" class="dropdown-item">Team</a>
+                    </div>
+                </div>
+                <a href="/mentor">Mentor</a>
+                <a href="/associate">Associate</a>
+            </div>
+            <div class="btns">
+                <% if (user && user.teamCreated) { %>
+                    <a href="/createteam"><button>My Team <i class="ri-arrow-right-fill"></i></button></a>
+                <% } else { %>
+                    <a href="/createteam"><button>Create Team <i class="ri-arrow-right-fill"></i></button></a>
+                <% } %>
+                <a href="/logout"><button>Logout <i class="ri-arrow-right-fill"></i></button></a>
+            </div>
+        </nav>
+    </div>
+    <div id="page2">
+        <div class="text">
+            <h1><span>SWACHHA</span> NAGAR</h1>
+            <h1>Nigam Challenge 2025</h1>
+            
+        </div>
+        <div class="image-div">
+            <video loop muted autoplay src="/videos/Environment Pollution Animation [ie9_uZvoOaY].mp4"></video>
+        </div>
+    </div>
+    <main>
+        <div id="page3">
+            <div class="visiondiv">
+                <h1>What is <span>SNNC</span> ?
+                </h1>
+                <p>
+                  Ready to compete for a cleaner Kolhapur? The Swacch Nagar Nigam Challenge (SNNC) is a high-stakes, 6-month competition designed to transform your locality. We challenge teams (societies/lanes) and individuals to earn up to 2000 points by completing exciting tasks, from social media blitzes and enforcing Wet/Dry waste segregation to tackling pollution after major festivals. This is your chance to join the Swacch Brigade, showcase your community's pride, earn massive recognition from the Municipal Corporation, and win awards while ensuring your area becomes the cleanest in the city. Join the movement and let the competition begin!
+                </p>
+            </div>
+            <div class="visiondiv visiondiv2">
+                <h1>Our <span>Vision</span></h1>
+                <p>
+                  Our vision is to build a self-sustaining model for urban cleanliness where the citizen is the primary guardian of the environment, not just a passive recipient of municipal services. We envision a Kolhapur where the stress on the Municipal Corporation's waste management system is significantly reduced because community vigilance and action—particularly against issues like Ganpati Visarjan pollution and the lack of Wet/Dry segregation—are standardized practices. This project seeks to foster a "Nagarik Pehal" (Citizen's Initiative) that creates a culture of competitive pride, leading to long-term behavioral change, drastically lowered operational costs for the government, and measurable improvements in public health and environmental quality across the district.
+                </p>
+            </div>
+        </div>
+        <div id="page4">
+            <section class="stats-section">
+                <div class="stat-box">
+                  <h2 class="counter" data-target="50">0</h2>
+                  <p>Teams </p>
+                </div>
+                <div class="stat-box">
+                  <h2 class="counter" data-target="40">0</h2>
+                  <p>Solo Registered</p>
+                </div>
+                <div class="stat-box">
+                  <h2 class="counter" data-target="100">0</h2>
+                  <p>Area Reachead (KM)</p>
+                </div>
+              </section>
+            
+        </div>
+        <div id="page5">
+            <h1>Incentives</h1>
+            <section class="carousel-section">
+                <div class="carousel-container" id="carousel">
+                  <div class="card">
+                    <div class="icon-space"><img src="https://www.ecell.in/nec/assets/svg/mentorship.svg" alt=""></div>
+                    <h3>Mentorship</h3>
+                    <p>Get guided by industry and civic cleanliness experts and professionals for excellence .</p>
+                  </div>
+                  <div class="card">
+                    <div class="icon-space"><img src="https://www.ecell.in/nec/assets/svg/networking.svg" alt=""></div>
+                    <h3>Networking</h3>
+                    <p>Connect with municipal leaders, NGOs, and sustainability professionals.</p>
+                  </div>
+                  <div class="card">
+                    <div class="icon-space"><img src="https://www.ecell.in/nec/assets/svg/certificates.svg" alt=""></div>
+                    <h3>Certification</h3>
+                    <p>Receive an official certificate from the Municipal Corporation for your contribution.</p>
+                  </div>
+                  <div class="card">
+                    <div class="icon-space"><img src="https://www.ecell.in/nec/assets/svg/prizes.svg" alt=""></div>
+                    <h3>Amazing Cashprize</h3>
+                    <p>Win exciting cash rewards for top-performing teams and individuals.</p>
+                  </div>
+                  <!-- <div class="card">
+                    <div class="icon-space"></div>
+                    <h3>Free Passes</h3>
+                    <p>Being part of a Pan-India organization adds value to your resume.</p>
+                  </div> -->
+                  
+                </div>
+            
+                <div class="arrows">
+                  <!-- <button class="arrow left" id="prev">&#8592;</button>
+                  <button class="arrow right" id="next">&#8594;</button> -->
+                </div>
+              </section>
+        </div>
+        <div id="page6">
+            <header>
+                <h1>Timeline</h1>
+            </header>
+            
+            <ul class="timeline">
+              <!-- Item 1 -->
+              <li>
+                <div class="direction-r">
+                  <div class="flag-wrapper">
+                    <span class="hexa"></span>
+                    <span class="flag">5<sup>th</sup>- 25 <sup>th</sup></span>
+                    <span class="time-wrapper"><span class="time">JAN 2026</span></span>
+                  </div>
+                  <div class="desc">Registration for Participants</div>
+                </div>
+              </li>
+            
+              <!-- Item 2 -->
+              <li>
+                <div class="direction-l">
+                  <div class="flag-wrapper">
+                    <span class="hexa"></span>
+                    <span class="flag">1<sup>st</sup></span>
+                    <span class="time-wrapper"><span class="time">FEB 2026</span></span>
+                  </div>
+                  <div class="desc">Swaccharambh Task Launch.</div>
+                </div>
+              </li>
+            
+              <!-- Item 3 -->
+              <li>
+                <div class="direction-r">
+                  <div class="flag-wrapper">
+                    <span class="hexa"></span>
+                    <span class="flag">15<sup>th</sup> </span>
+                    <span class="time-wrapper"><span class="time">FEB 2026</span></span>
+                  </div>
+                  <div class="desc">Deadline for Submission</div>
+                </div>
+              </li>
+              <li>
+                <div class="direction-l">
+                  <div class="flag-wrapper">
+                    <span class="hexa"></span>
+                    <span class="flag">20<sup>th</sup></span>
+                    <span class="time-wrapper"><span class="time">FEB 2026</span></span>
+                  </div>
+                  <div class="desc">Provisional Dashboard Declaration (Phase-1)</div>
+                </div>
+              </li>
+              <li>
+                <div class="direction-r">
+                  <div class="flag-wrapper">
+                    <span class="hexa"></span>
+                    <span class="flag">25<sup>th</sup> - 15<sup>th</sup></span>
+                    <span class="time-wrapper"><span class="time">March 2026</span></span>
+                  </div>
+                  <div class="desc">Swa-Swachhata Sankalp (Phase-2).</div>
+                </div>
+              </li>
+              <li>
+                <div class="direction-l">
+                  <div class="flag-wrapper">
+                    <span class="hexa"></span>
+                    <span class="flag">26<sup>th</sup></span>
+                    <span class="time-wrapper"><span class="time">March 2026</span></span>
+                  </div>
+                  <div class="desc">Provisional Leaderboard (Phase-2)</div>
+                </div>
+              </li>
+              <li>
+                <div class="direction-r">
+                  <div class="flag-wrapper">
+                    <span class="hexa"></span>
+                    <span class="flag">1<sup>st</sup> - 20<sup>th</sup></span>
+                    <span class="time-wrapper"><span class="time">APRIL 2026</span></span>
+                  </div>
+                  <div class="desc">Vibhajan Vichar Launch (Phase-3).</div>
+                </div>
+              </li>
+
+              <li>
+                <div class="direction-l">
+                  <div class="flag-wrapper">
+                    <span class="hexa"></span>
+                    <span class="flag">26<sup>th</sup></span>
+                    <span class="time-wrapper"><span class="time">APRIL 2026</span></span>
+                  </div>
+                  <div class="desc">Provisional Leaderboard (Final).</div>
+                </div>
+              </li>
+              <li>
+                <div class="direction-r">
+                  <div class="flag-wrapper">
+                    <span class="hexa"></span>
+                    <span class="flag">1<sup>st</sup> - 20<sup>th</sup></span>
+                    <span class="time-wrapper"><span class="time">MAY 2026</span></span>
+                  </div>
+                  <div class="desc">Groundwork Upkram (Phase-4).</div>
+                </div>
+              </li>
+
+              <li>
+                <div class="direction-l">
+                  <div class="flag-wrapper">
+                    <span class="hexa"></span>
+                    <span class="flag">30<sup>th</sup></span>
+                    <span class="time-wrapper"><span class="time">MAY 2026</span></span>
+                  </div>
+                  <div class="desc">Final Leaderboard.</div>
+                </div>
+              </li>
+              <li>
+                <div class="direction-r">
+                  <div class="flag-wrapper">
+                    <span class="hexa"></span>
+                    <span class="flag">1<sup>st</sup></span>
+                    <span class="time-wrapper"><span class="time">JUNE 2026</span></span>
+                  </div>
+                  <div class="desc">Prize Distribution.</div>
+                </div>
+              </li>
+            </ul>
+        </div>
+        <div id="page7">
+          <div class="guidlines">
+            <div class="guide-heading">
+              <h1>Guidlines</h1>
+            </div>
+            <section class="faq-container1">
+              
+              <div class="faq-item1">
+                <button class="faq-question1">
+                  <i class="ri-arrow-drop-right-line"></i>
+                  Participants must follow all Nagar Nigam cleanliness protocols.
+                  <!-- <span class="faq-icon">+</span> -->
+                </button>
+                
+              </div>
+          
+              <div class="faq-item1">
+                <button class="faq-question1">
+                  <i class="ri-arrow-drop-right-line"></i>
+                  Use of plastic bags and non-biodegradable waste is strictly discouraged.
+                  <!-- <span class="faq-icon">+</span> -->
+                </button>
+                
+              </div>
+          
+              <div class="faq-item1">
+                <button class="faq-question1">
+                  <i class="ri-arrow-drop-right-line"></i>
+                  No participant should harm or tamper with public or private property
+                  <!-- <span class="faq-icon">+</span> -->
+                </button>
+                
+              </div>
+          
+              <div class="faq-item1">
+                <button class="faq-question1">
+
+                  <i class="ri-arrow-drop-right-line"></i>
+                  All cleaning must happen in designated safe areas only  
+                  <!-- <span class="faq-icon">+</span> -->
+                </button>
+                
+              </div>
+              <div class="faq-item1">
+                <button class="faq-question1">
+                  <i class="ri-arrow-drop-right-line"></i>
+                  Participants must not block roads or cause inconvenience to residents.
+                  <!-- <span class="faq-icon">+</span> -->
+                </button>
+                
+              </div>
+              <div class="faq-item1">
+                <button class="faq-question1">
+                  <i class="ri-arrow-drop-right-line"></i>
+                  Any harmful chemicals or unsafe tools are not allowed.
+                  <!-- <span class="faq-icon">+</span> -->
+                </button>
+                
+              </div>
+              <div class="faq-item1">
+                <button class="faq-question1">
+                  <i class="ri-arrow-drop-right-line"></i>
+                  Waste collected must be properly segregated (wet, dry, recyclable).
+                  <!-- <span class="faq-icon">+</span> -->
+                </button>
+                
+              </div>
+              <div class="faq-item1">
+                <button class="faq-question1">
+                  <i class="ri-arrow-drop-right-line"></i>
+                  Participants must behave respectfully with residents.
+                  <!-- <span class="faq-icon">+</span> -->
+                </button>
+                
+              </div>
+              <div class="faq-item1">
+                
+                <button class="faq-question1">
+                  <i class="ri-arrow-drop-right-line"></i>
+                  Activities must be recorded with photos and videos.
+                  <!-- <span class="faq-icon">+</span> -->
+                </button>
+                
+              </div>
+              <div class="faq-item1">
+                <button class="faq-question1">
+                  <i class="ri-arrow-drop-right-line"></i>
+                  The final report must be submitted within the given deadline.
+                  <!-- <span class="faq-icon">+</span> -->
+                </button>
+                
+              </div>
+            </section>
+          </div>
+        </div>
+        <div id="page8">
+          <section class="faq-container">
+            <h2 class="faq-title">Frequently Asked Questions</h2>
+        
+            <div class="faq-item">
+              <button class="faq-question">
+                What is the purpose of the Cleanliness Challenge?
+                <span class="faq-icon">+</span>
+              </button>
+              <div class="faq-answer">
+                The challenge aims to promote cleanliness, hygiene, awareness, and eco-friendly habits among residents. It encourages communities to take responsibility for keeping their area clean and environmentally friendly.
+              </div>
+            </div>
+        
+            <div class="faq-item">
+              <button class="faq-question">
+                Who can participate in this competition?
+                <span class="faq-icon">+</span>
+              </button>
+              <div class="faq-answer">
+                Anyone — individuals, families, groups, societies, wards, colonies, schools, or volunteer teams. Both solo participants and teams can register.
+              </div>
+            </div>
+        
+            <div class="faq-item">
+              <button class="faq-question">
+                Is it mandatory to document the activities?
+                <span class="faq-icon">+</span>
+              </button>
+              <div class="faq-answer">
+                Yes. Documentation through photos and videos is essential for evaluation. Before-and-after images help judges measure the improvement.  
+              </div>
+            </div>
+        
+            <div class="faq-item">
+              <button class="faq-question">
+                Do we need to bring our own cleaning tools? 
+                <span class="faq-icon">+</span>
+              </button>
+              <div class="faq-answer">
+                In most cases, participants must bring their own gloves, masks, brooms, and bags. However, some Nagar Nigam units may provide basic tools depending on availability.
+              </div>
+            </div>
+            <div class="faq-item">
+              <button class="faq-question">
+                Can solo participants compete equally with team participants?
+                <span class="faq-icon">+</span>
+              </button>
+              <div class="faq-answer">
+                Yes. Solo participants have separate evaluation criteria to ensure fairness. Their work is judged based on impact, creativity, and documentation within their capability.
+              </div>
+            </div>
+            <div class="faq-item">
+              <button class="faq-question">
+                Are eco-friendly tasks compulsory?
+                <span class="faq-icon">+</span>
+              </button>
+              <div class="faq-answer">
+                Yes. Promoting eco-friendly practices—like using clay idols, avoiding plastic, and adopting sustainable materials—is an important part of the challenge.
+              </div>
+            </div>
+            <div class="faq-item">
+              <button class="faq-question">
+                Will participants receive any certificates? 
+                <span class="faq-icon">+</span>
+              </button>
+              <div class="faq-answer">
+                Most Nagar Nigams provide certificates of participation, and winners receive awards or special recognition during local events.
+
+              </div>
+            </div>
+            <div class="faq-item">
+              <button class="faq-question">
+                Can we include school children or senior citizens in our team?  
+                <span class="faq-icon">+</span>
+              </button>
+              <div class="faq-answer">
+                Yes, participation from students, senior citizens, and volunteers is encouraged. They help increase awareness and community bonding.
+              </div>
+            </div>
+          </section>
+        
+        </div>
+        <div id="page9">
+          <h1>Team</h1>
+          <div class="team">
+            <div class="box">
+              <div class="box-image">
+                 <img src="/images/sushrut.jpg" alt="">
+              </div>
+              <div class="box-text">
+                <h2>Sushrut Deshmukh</h2>
+                <span>PRN : 2003</span>
+              </div>
+            </div>
+            <div class="box">
+              <div class="box-image">
+                <img src="/images/shravni.jpg" alt="">
+              </div>
+              <div class="box-text">
+                <h2>Shravani Kesarkar</h2>
+                <span>PRN : 2043</span>
+              </div>
+            </div>
+            <div class="box">
+              <div class="box-image">
+                <img src="/images/shriyash.jpg" alt="">
+              </div>
+              <div class="box-text">
+                <h2>Shiryash Doijad</h2>
+                <span>PRN : 2013</span>
+              </div>
+            </div>
+            <div class="box">
+              <div class="box-image">
+                <img src="/images/nirmal.jpg" alt="">
+              </div>
+              <div class="box-text">
+                <h2>Nirmal Patil</h2>
+                <span>PRN : 2002</span>
+              </div>
+            </div>
+            <div class="box">
+              <div class="box-image">
+                 <img src="/images/IMG_20251116_125523.jpg" alt="">
+              </div>
+              <div class="box-text">
+                <h2>Saie Jadhav</h2>
+                <span>PRN : 2042</span>
+              </div>
+            </div>
+            <div class="box">
+              <div class="box-image">
+                 <img src="/images/IMG-20251115-WA0002.jpg" alt="">
+              </div>
+              <div class="box-text">
+                <h2>Madhura Shinde</h2>
+                <span>PRN : 2046</span>
+              </div>
+            </div>
+            
+          </div>
+        </div>
+        <div id="page10">
+          <footer class="footer">
+            <div class="footer-container">
+          
+              <!-- Logo + tagline -->
+              <div class="footer-section">
+                <h2 class="logo"><img src="/images/logo.png" alt=""></h2>
+                <h3 class="title">SWACHHA BRIGADE<br>KOLHAPUR </h3>
+                <!-- <p class="tagline">CREATING JOB CREATORS</p> -->
+              </div>
+          
+              <!-- Quick Links -->
+              <div class="footer-section">
+                <h3 class="heading">QUICK LINKS</h3>
+                <ul class="links">
+                  <li>About</li>
+                  <li>Team</li>
+                  <li>Mentor</li>
+                  <li>Contact</li>
+                  <li>Registration</li>
+                </ul>
+              </div>
+          
+              <!-- Reach us -->
+              <div class="footer-section">
+                <h3 class="heading">REACH US</h3>
+                <p>GCOE Kolhapur,<br>
+                   Vidyanagar,<br>
+                   old pune banglore highway<br>
+                   kolhapur, India
+                </p>
+              </div>
+          
+              <!-- Contact + Social -->
+              <div class="footer-section">
+                <h3 class="heading">CONTACT US</h3>
+                <p><a href="mailto:nec@ecell.in">demo@snnc.in</a></p>
+          
+                <h3 class="heading">FOLLOW US</h3>
+                <div class="social-icons">
+                  <span><i class="ri-instagram-line"></i></span>
+                  <span><i class="ri-youtube-line"></i></span>
+                  <span><i class="ri-telegram-2-line"></i></span>
+                </div>
+              </div>
+            </div>
+          
+            <div class="copyright">
+              © 2025 SNNC. All rights reserved.
+            </div>
+          </footer>
+          
+        </div>
+    </main>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/gsap.min.js" integrity="sha512-NcZdtrT77bJr4STcmsGAESr06BYGE8woZdSdEgqnpyqac7sugNO+Tr4bGwGF3MsnEkGKhU2KL2xh6Ec+BqsaHA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="/js/script.js"></script>
+</body>
+
+</html>
