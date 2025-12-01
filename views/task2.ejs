@@ -7,6 +7,35 @@
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <link href="https://cdn.jsdelivr.net/npm/remixicon@4.7.0/fonts/remixicon.css" rel="stylesheet" />
     <link rel="stylesheet" href="/css/task2.css">
+    <style>
+        .badge-submitted {
+            background: #fef3c7;
+            color: #92400e;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        .badge-checked {
+            background: #d1fae5;
+            color: #065f46;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        .badge-evaluated {
+            background: #d1fae5;
+            color: #065f46;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+    </style>
     <title>Document</title>
 </head>
 
@@ -100,6 +129,12 @@
                                 <a id="viewSubmissionBtn" class="view-btn disabled" rel="noopener" target="_blank">View</a>
                             </p>
                             <p id="submissionMeta" class="upload-meta">No submission yet.</p>
+                            <p id="taskStatusDisplay" style="margin-top: 10px; display: none;">
+                                <strong>Status:</strong> <span id="submissionStatus" class="badge"></span>
+                            </p>
+                            <p id="marksAssignedDisplay" style="margin-top: 10px; display: none;">
+                                <strong>Marks Assigned:</strong> <span id="submissionMarks" style="font-size: 16px; color: #10b981; font-weight: bold;">-</span>
+                            </p>
                         </div>
 
                         <div id="flashMessages">
@@ -176,15 +211,62 @@
 
         const updateSubmissionUI = (submission) => {
             if (!viewBtn || !submissionMeta) return;
+            const taskStatusDisplay = document.getElementById("taskStatusDisplay");
+            const marksAssignedDisplay = document.getElementById("marksAssignedDisplay");
+            const submissionStatus = document.getElementById("submissionStatus");
+            const submissionMarks = document.getElementById("submissionMarks");
+            
             if (submission) {
                 viewBtn.classList.remove("disabled");
                 viewBtn.href = submission.filePath;
                 viewBtn.target = "_blank";
                 submissionMeta.textContent = `Latest upload: ${(submission.originalFileName || submission.fileName || "submission.pdf")} (${new Date(submission.uploadDate).toLocaleString()})`;
+                
+                // Determine status: checked > submitted > not submitted
+                const status = submission.status || "submitted";
+                // Check if marks exist and are greater than 0 (0 means not yet evaluated)
+                const hasMarks = submission.marks !== undefined && submission.marks !== null && submission.marks !== "" && submission.marks > 0;
+                
+                // Display status
+                if (taskStatusDisplay && submissionStatus) {
+                    taskStatusDisplay.style.display = "block";
+                    submissionStatus.textContent = status;
+                    // Update badge class based on status
+                    if (status === "checked") {
+                        submissionStatus.className = "badge badge-checked";
+                    } else if (status === "submitted") {
+                        submissionStatus.className = "badge badge-submitted";
+                    } else {
+                        submissionStatus.className = "badge badge-submitted";
+                    }
+                }
+                
+                // Display marks if assigned
+                if (marksAssignedDisplay && submissionMarks) {
+                    if (hasMarks) {
+                        marksAssignedDisplay.style.display = "block";
+                        submissionMarks.textContent = submission.marks;
+                    } else {
+                        marksAssignedDisplay.style.display = "none";
+                    }
+                }
             } else {
+                // No submission
                 viewBtn.classList.add("disabled");
                 viewBtn.removeAttribute("href");
                 submissionMeta.textContent = "No submission yet.";
+                
+                // Show "Not Submitted" status
+                if (taskStatusDisplay && submissionStatus) {
+                    taskStatusDisplay.style.display = "block";
+                    submissionStatus.textContent = "Not Submitted";
+                    submissionStatus.className = "badge badge-submitted";
+                }
+                
+                // Hide marks
+                if (marksAssignedDisplay) {
+                    marksAssignedDisplay.style.display = "none";
+                }
             }
         };
 

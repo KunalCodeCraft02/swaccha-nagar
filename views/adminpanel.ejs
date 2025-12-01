@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - Task Submissions</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.7.0/fonts/remixicon.css" rel="stylesheet" />
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: black;
+            min-height: 100vh;
+            padding: 20px;
+            display:flex;
+            justify-content:center;
+            align-items:center;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            padding: 30px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #e5e7eb;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            color: #1f2937;
+            margin: 0;
+        }
+
+        .logout-btn {
+            background: #19f519;
+            color: black;
+            padding: 10px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: background 0.3s;
+        }
+
+        .logout-btn:hover {
+            background: #dc2626;
+        }
+
+        .table-container {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        thead {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        th {
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        td {
+            padding: 15px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        tbody tr:hover {
+            background: #f9fafb;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .badge-submitted {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .badge-checked {
+            background: #d1fae5;
+            color: #065f46;
+        }
+        .badge-evaluated {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-view {
+            background: #3b82f6;
+            color: white;
+        }
+
+        .btn-view:hover {
+            background: #2563eb;
+        }
+
+        .btn-save {
+            background: #10b981;
+            color: white;
+        }
+
+        .btn-save:hover {
+            background: #059669;
+        }
+
+        .marks-input {
+            width: 80px;
+            padding: 8px;
+            border: 2px solid #e5e7eb;
+            border-radius: 6px;
+            font-size: 14px;
+            text-align: center;
+        }
+
+        .marks-input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .no-submissions {
+            text-align: center;
+            padding: 60px 20px;
+            color: #6b7280;
+        }
+
+        .no-submissions i {
+            font-size: 64px;
+            margin-bottom: 20px;
+            color: #d1d5db;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #6b7280;
+        }
+
+        .success-message {
+            background: #d1fae5;
+            color: #065f46;
+            padding: 12px 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .error-message {
+            background: #fee2e2;
+            color: #991b1b;
+            padding: 12px 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .file-info {
+            font-size: 12px;
+            color: #6b7280;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1><i class="ri-admin-line"></i> Admin Panel - Task Submissions</h1>
+            <a href="/logout" class="logout-btn"><i class="ri-logout-box-line"></i> Logout</a>
+        </div>
+
+        <div id="successMessage" class="success-message"></div>
+        <div id="errorMessage" class="error-message"></div>
+
+        <div class="table-container">
+            <div id="loading" class="loading">
+                <i class="ri-loader-4-line" style="font-size: 32px; animation: spin 1s linear infinite;"></i>
+                <p>Loading submissions...</p>
+            </div>
+
+            <div id="noSubmissions" class="no-submissions" style="display: none;">
+                <i class="ri-file-list-3-line"></i>
+                <h2>No Submissions Yet</h2>
+                <p>No teams have submitted any tasks yet.</p>
+            </div>
+
+            <table id="submissionsTable" style="display: none;">
+                <thead>
+                    <tr>
+                        <th>Team Name</th>
+                        <th>Phase</th>
+                        <th>Task Name</th>
+                        <th>File</th>
+                        <th>Upload Date</th>
+                        <th>Status</th>
+                        <th>Marks</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="submissionsBody">
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        // Task mapping for display
+        const taskMapping = {
+            'task1': { phase: 'Phase 1', name: 'Task 1' },
+            'task2': { phase: 'Phase 1', name: 'Task 2' },
+            'task3': { phase: 'Phase 1', name: 'Task 3' },
+            'task2point1': { phase: 'Phase 2', name: 'Task 2.1' },
+            'task2pointwo': { phase: 'Phase 2', name: 'Task 2.2' },
+            'task2pointhree': { phase: 'Phase 2', name: 'Task 2.3' },
+            'tasktwopointfour': { phase: 'Phase 2', name: 'Task 2.4' },
+            'taskthreepointone': { phase: 'Phase 3', name: 'Task 3.1' },
+            'taskthreepointwo': { phase: 'Phase 3', name: 'Task 3.2' },
+            'taskthreepointhree': { phase: 'Phase 3', name: 'Task 3.3' },
+            'taskfourpointone': { phase: 'Phase 4', name: 'Task 4.1' },
+            'taskfourpointwo': { phase: 'Phase 4', name: 'Task 4.2' }
+        };
+
+        function showMessage(elementId, message, isError = false) {
+            const element = document.getElementById(elementId);
+            if (element) {
+                element.textContent = message;
+                element.style.display = 'block';
+                if (isError) {
+                    element.className = 'error-message';
+                } else {
+                    element.className = 'success-message';
+                }
+                setTimeout(() => {
+                    element.style.display = 'none';
+                }, 5000);
+            }
+        }
+
+        async function loadSubmissions() {
+            try {
+                const response = await fetch('/admin/submissions');
+                const data = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(data.message || 'Failed to load submissions');
+                }
+
+                const loading = document.getElementById('loading');
+                const noSubmissions = document.getElementById('noSubmissions');
+                const table = document.getElementById('submissionsTable');
+                const tbody = document.getElementById('submissionsBody');
+
+                loading.style.display = 'none';
+
+                if (!data.submissions || data.submissions.length === 0) {
+                    noSubmissions.style.display = 'block';
+                    table.style.display = 'none';
+                    return;
+                }
+
+                noSubmissions.style.display = 'none';
+                table.style.display = 'table';
+                tbody.innerHTML = '';
+
+                data.submissions.forEach(submission => {
+                    const taskInfo = taskMapping[submission.taskId] || { phase: 'Unknown', name: submission.taskId };
+                    const status = submission.status || 'submitted';
+                    const marks = submission.marks !== undefined ? submission.marks : '';
+
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td><strong>${submission.teamName || 'N/A'}</strong></td>
+                        <td>${taskInfo.phase}</td>
+                        <td>${taskInfo.name}</td>
+                        <td>
+                            <div>
+                                <strong>${submission.originalFileName || submission.fileName || 'N/A'}</strong>
+                                <div class="file-info">Size: ${formatFileSize(submission.fileSize || 0)}</div>
+                            </div>
+                        </td>
+                        <td>${formatDate(submission.uploadDate)}</td>
+                        <td>
+                            <span class="badge badge-${status}">${status}</span>
+                        </td>
+                        <td>
+                            <input type="number" 
+                                   class="marks-input" 
+                                   value="${marks}" 
+                                   min="0" 
+                                   max="100"
+                                   data-user-id="${submission.userId}"
+                                   data-task-id="${submission.taskId}"
+                                   placeholder="Marks">
+                        </td>
+                        <td>
+                            <a href="${submission.filePath}" target="_blank" class="btn btn-view">
+                                <i class="ri-eye-line"></i> View
+                            </a>
+                            <button class="btn btn-save" 
+                                    onclick="saveMarks('${submission.userId}', '${submission.taskId}')">
+                                <i class="ri-save-line"></i> Save
+                            </button>
+                        </td>
+                    `;
+                    tbody.appendChild(row);
+                });
+            } catch (error) {
+                console.error('Error loading submissions:', error);
+                document.getElementById('loading').style.display = 'none';
+                showMessage('errorMessage', 'Failed to load submissions: ' + error.message, true);
+            }
+        }
+
+        async function saveMarks(userId, taskId) {
+            const input = document.querySelector(`input[data-user-id="${userId}"][data-task-id="${taskId}"]`);
+            const marks = input ? parseFloat(input.value) : null;
+
+            if (marks === null || marks === '' || isNaN(marks)) {
+                showMessage('errorMessage', 'Please enter valid marks', true);
+                return;
+            }
+
+            if (marks < 0 || marks > 100) {
+                showMessage('errorMessage', 'Marks must be between 0 and 100', true);
+                return;
+            }
+
+            try {
+                const response = await fetch('/admin/update-marks', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        userId: userId,
+                        taskId: taskId,
+                        marks: marks
+                    })
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(data.message || 'Failed to update marks');
+                }
+
+                showMessage('successMessage', 'Marks updated successfully! Status changed to checked.');
+                
+                // Reload submissions to update the status badge
+                setTimeout(() => {
+                    loadSubmissions();
+                }, 1000);
+            } catch (error) {
+                console.error('Error saving marks:', error);
+                showMessage('errorMessage', 'Failed to save marks: ' + error.message, true);
+            }
+        }
+
+        function formatDate(dateString) {
+            if (!dateString) return 'N/A';
+            const date = new Date(dateString);
+            return date.toLocaleString('en-US', {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+        }
+
+        function formatFileSize(bytes) {
+            if (!bytes) return '0 B';
+            if (bytes < 1024) return bytes + ' B';
+            if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(2) + ' KB';
+            return (bytes / (1024 * 1024)).toFixed(2) + ' MB';
+        }
+
+        // Load submissions on page load
+        document.addEventListener('DOMContentLoaded', loadSubmissions);
+
+        // Add CSS animation for spinner
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes spin {
+                from { transform: rotate(0deg); }
+                to { transform: rotate(360deg); }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+
+</html>
+

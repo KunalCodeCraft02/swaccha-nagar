@@ -7,7 +7,26 @@
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <link href="https://cdn.jsdelivr.net/npm/remixicon@4.7.0/fonts/remixicon.css" rel="stylesheet" />
     <link rel="stylesheet" href="/css/task1.css">
-    <script src="/js/taskUploadManager.js"></script>
+    <style>
+        .badge-submitted {
+            background: #fef3c7;
+            color: #92400e;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        .badge-checked {
+            background: #d1fae5;
+            color: #065f46;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+    </style>
     <title>Document</title>
 </head>
 
@@ -99,26 +118,38 @@
                             <h2 class="card-title">Task Status</h2>
                             <p><strong>Deadline:</strong> <span class="badge">15 March 2026</span></p>
                             <p><strong>MAX Points:</strong> <span class="badge">150</span></p>
-                            <p><strong>Current submission:</strong> <button class="view-btn"
-                                    id="viewSubmissionBtn">View</button></p>
+                            <p class="submission-row">
+                                <strong>Current submission:</strong>
+                                <a id="viewSubmissionBtn" class="view-btn disabled" rel="noopener"
+                                    target="_blank">View</a>
+                            </p>
+                            <p id="submissionMeta" class="upload-meta">No submission yet.</p>
+                            <p id="taskStatusDisplay" style="margin-top: 10px; display: none;">
+                                <strong>Status:</strong> <span id="submissionStatus" class="badge"></span>
+                            </p>
+                            <p id="marksAssignedDisplay" style="margin-top: 10px; display: none;">
+                                <strong>Marks Assigned:</strong> <span id="submissionMarks" style="font-size: 16px; color: #10b981; font-weight: bold;">-</span>
+                            </p>
                         </div>
 
-                        <!-- <div class="card small">
-                            <h2 class="card-title">Feedback</h2>
-                            <p>Good work</p>
-                        </div> -->
-
-                        <div class="upload-box" id="uploadBox">
-                            <input type="file" id="fileInput" accept="application/pdf">
-
-                            <div class="upload-icon">⬆</div>
-                            <p id="uploadText">Choose a file or drag it here</p>
-                            <span>PDF files only (max 10MB)</span>
+                        <div id="flashMessages">
+                            <div class="alert success" id="uploadSuccess" hidden></div>
+                            <div class="alert error" id="uploadError" hidden></div>
                         </div>
 
-                        <p id="fileName" class="file-name"></p>
+                        <form id="taskUploadForm" enctype="multipart/form-data">
+                            <div class="upload-box" id="uploadBox">
+                                <input type="file" id="fileInput" name="file" accept="application/pdf">
 
-                        <button id="submitBtn" class="submit-btn" disabled>Submit Task</button>
+                                <div class="upload-icon">⬆</div>
+                                <p id="uploadText">Choose a file or drag it here</p>
+                                <span>PDF files only (max 10MB)</span>
+                            </div>
+
+                            <p id="fileName" class="file-name"></p>
+
+                            <button id="submitBtn" class="submit-btn" type="submit" disabled>Submit Task</button>
+                        </form>
 
                     </div>
 
@@ -131,6 +162,7 @@
 
 
     <script>
+        const TASK_ID = "task2point1";
         document.addEventListener('DOMContentLoaded', function () {
             const trackDropdown = document.getElementById("trackDropdown");
             const dropdown = document.querySelector(".dropdown");
@@ -148,12 +180,185 @@
                     }
                 });
             }
-
-            // Initialize task upload manager
-            new TaskUploadManager("task2point1");
         });
 
+        const uploadBox = document.getElementById("uploadBox");
+        const fileInput = document.getElementById("fileInput");
+        const uploadText = document.getElementById("uploadText");
+        const fileName = document.getElementById("fileName");
+        const submitBtn = document.getElementById("submitBtn");
+        const uploadForm = document.getElementById("taskUploadForm");
+        const viewBtn = document.getElementById("viewSubmissionBtn");
+        const submissionMeta = document.getElementById("submissionMeta");
+        const successAlert = document.getElementById("uploadSuccess");
+        const errorAlert = document.getElementById("uploadError");
 
+        const showAlert = (element, message) => {
+            if (!element) return;
+            if (message) {
+                element.textContent = message;
+                element.hidden = false;
+            } else {
+                element.textContent = "";
+                element.hidden = true;
+            }
+        };
+
+        const updateSubmissionUI = (submission) => {
+            if (!viewBtn || !submissionMeta) return;
+            const taskStatusDisplay = document.getElementById("taskStatusDisplay");
+            const marksAssignedDisplay = document.getElementById("marksAssignedDisplay");
+            const submissionStatus = document.getElementById("submissionStatus");
+            const submissionMarks = document.getElementById("submissionMarks");
+            
+            if (submission) {
+                viewBtn.classList.remove("disabled");
+                viewBtn.href = submission.filePath;
+                viewBtn.target = "_blank";
+                submissionMeta.textContent = `Latest upload: ${(submission.originalFileName || submission.fileName || "submission.pdf")} (${new Date(submission.uploadDate).toLocaleString()})`;
+                
+                const status = submission.status || "submitted";
+                const hasMarks = submission.marks !== undefined && submission.marks !== null && submission.marks !== "" && submission.marks > 0;
+                
+                if (taskStatusDisplay && submissionStatus) {
+                    taskStatusDisplay.style.display = "block";
+                    submissionStatus.textContent = status;
+                    if (status === "checked") {
+                        submissionStatus.className = "badge badge-checked";
+                    } else if (status === "submitted") {
+                        submissionStatus.className = "badge badge-submitted";
+                    } else {
+                        submissionStatus.className = "badge badge-submitted";
+                    }
+                }
+                
+                if (marksAssignedDisplay && submissionMarks) {
+                    if (hasMarks) {
+                        marksAssignedDisplay.style.display = "block";
+                        submissionMarks.textContent = submission.marks;
+                    } else {
+                        marksAssignedDisplay.style.display = "none";
+                    }
+                }
+            } else {
+                viewBtn.classList.add("disabled");
+                viewBtn.removeAttribute("href");
+                submissionMeta.textContent = "No submission yet.";
+                
+                if (taskStatusDisplay && submissionStatus) {
+                    taskStatusDisplay.style.display = "block";
+                    submissionStatus.textContent = "Not Submitted";
+                    submissionStatus.className = "badge badge-submitted";
+                }
+                
+                if (marksAssignedDisplay) {
+                    marksAssignedDisplay.style.display = "none";
+                }
+            }
+        };
+
+        const fetchSubmission = async () => {
+            try {
+                const response = await fetch(`/get-task-submission?taskId=${TASK_ID}`);
+                if (!response.ok) throw new Error("No submission");
+                const data = await response.json();
+                updateSubmissionUI(data.submission);
+            } catch (error) {
+                updateSubmissionUI(null);
+            }
+        };
+
+        const enableSubmit = (file) => {
+            uploadText.innerText = "File selected";
+            fileName.innerText = "Selected: " + file.name;
+            submitBtn.disabled = false;
+            submitBtn.classList.add("enabled");
+        };
+
+        const resetUploader = () => {
+            uploadText.innerText = "Choose a file or drag it here";
+            fileName.innerText = "";
+            fileInput.value = "";
+            submitBtn.classList.remove("enabled");
+            submitBtn.disabled = true;
+        };
+
+        const handleFile = (file) => {
+            if (!file) return;
+            if (file.type !== "application/pdf") {
+                alert("Only PDF files allowed!");
+                return;
+            }
+            if (file.size > 10 * 1024 * 1024) {
+                alert("File must be less than 10MB!");
+                return;
+            }
+            enableSubmit(file);
+        };
+
+        fileInput.addEventListener("change", () => {
+            const file = fileInput.files[0];
+            handleFile(file);
+        });
+
+        uploadBox.addEventListener("dragover", (e) => {
+            e.preventDefault();
+            uploadBox.classList.add("dragover");
+        });
+
+        uploadBox.addEventListener("dragleave", () => {
+            uploadBox.classList.remove("dragover");
+        });
+
+        uploadBox.addEventListener("drop", (e) => {
+            e.preventDefault();
+            uploadBox.classList.remove("dragover");
+            const file = e.dataTransfer.files[0];
+            if (file) {
+                const dataTransfer = new DataTransfer();
+                dataTransfer.items.add(file);
+                fileInput.files = dataTransfer.files;
+                handleFile(file);
+            }
+        });
+
+        uploadForm.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            showAlert(successAlert, "");
+            showAlert(errorAlert, "");
+
+            if (!fileInput.files.length) {
+                alert("Please upload a PDF first!");
+                return;
+            }
+
+            submitBtn.disabled = true;
+            submitBtn.textContent = "Uploading...";
+
+            const formData = new FormData();
+            formData.append("file", fileInput.files[0]);
+            formData.append("taskId", TASK_ID);
+
+            try {
+                const response = await fetch("/upload-task-file", {
+                    method: "POST",
+                    body: formData
+                });
+                const data = await response.json();
+                if (!response.ok || !data.success) {
+                    throw new Error(data.message || "Upload failed");
+                }
+                showAlert(successAlert, data.message || "File uploaded successfully.");
+                updateSubmissionUI(data.file);
+                resetUploader();
+            } catch (error) {
+                showAlert(errorAlert, error.message || "Unable to upload the file.");
+            } finally {
+                submitBtn.textContent = "Submit Task";
+            }
+        });
+
+        fetchSubmission();
 
     </script>
 </body>

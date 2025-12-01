@@ -1,9 +1,12 @@
 const express = require("express");
 const router = express.Router();
-const bcrypt = require("bcrypt");
+// const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
+
 const jwt = require("jsonwebtoken");
 const userModel = require("../model/users");
 const memberModel = require("../model/member");
+const adminModel = require("../model/admin");
 const cookieParser = require("cookie-parser");
 const upload = require("../middleware/multerConfig");
 const fs = require("fs");
@@ -16,13 +19,25 @@ const ALLOWED_TASKS = new Set([
     "task2point1",
     "task2pointwo",
     "task2pointhree",
+    "tasktwopointfour",
     "taskthreepointone",
     "taskthreepointwo",
-    "taskthreepointhree"
+    "taskthreepointhree",
+    "taskfourpointone",
+    "taskfourpointwo"
 ]);
 
 const resolvePublicUploadPath = (filePath = "") =>
     path.join(__dirname, "..", "public", filePath.replace(/^\/+/, ""));
+
+// Helper function to check if user is admin (kept for potential future use)
+const isAdmin = (req) => {
+    // Only return true if userid is exactly "admin" (string, not MongoDB ObjectId)
+    // Regular users have MongoDB ObjectIds, so this check is safe
+    if (!req.user || !req.user.userid) return false;
+    return req.user.userid === "admin";
+};
+
 const home = (req, res) => {
     res.render("Home");
 }
@@ -188,7 +203,75 @@ const login = async (req, res) => {
 }
 
 
+const admin = (req, res) => {
+    res.render("admin");
+}
 
+const adminlogin = async (req,res)=>{
+    const { email, password } = req.body;
+    
+    try {
+        // Check if email and password are provided
+        if (!email || !password) {
+            return res.send(`
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <title>Login Error</title>
+                </head>
+                <body>
+                    <script>
+                        alert("Email and password are required");
+                        window.location.href = "/adminpanel";
+                    </script>
+                </body>
+                </html>
+            `);
+        }
+
+        // Check if credentials match
+        if (email === "root@gmail.com" && password === "root") {
+            // Create a token for admin (using a dummy userid since we're not using database)
+            let token = jwt.sign({ email: email, userid: "admin", isAdmin: true }, "thenameiskunalkailasbodkhe", { expiresIn: '1h' });
+            res.cookie("token", token);
+            res.status(200);
+            res.redirect("/adminpanel");
+        }
+        else {
+            return res.send(`
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <title>Login Error</title>
+                </head>
+                <body>
+                    <script>
+                        alert("Invalid credentials");
+                        window.location.href = "/admin";
+                    </script>
+                </body>
+                </html>
+            `);
+        }
+    }
+    catch (e) {
+        console.error("Admin login error:", e);
+        return res.send(`
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <title>Login Error</title>
+            </head>
+            <body>
+                <script>
+                    alert("Internal server error");
+                    window.location.href = "/admin";
+                </script>
+            </body>     
+            </html>
+        `);
+    }
+}
 
 
 
@@ -219,11 +302,6 @@ const mentor = (req, res) => {
 const associate = (req, res) => {
     res.render("associate");
 }
-
-const taskfourpointone = (req, res) => {
-    res.render("taskfourpointone");
-}
-
 
 const createteam = async (req, res) => {
     try {
@@ -317,6 +395,9 @@ const taskthreepointhree = (req, res) => {
 
 const tasktwopointfour = (req, res) => {
     res.render("tasktwopointfour");
+}
+const taskfourpointone = (req, res) => {
+    res.render("taskfourpointone");
 }
 const taskfourpointwo = (req, res) => {
     res.render("taskfourpointwo");
@@ -420,8 +501,14 @@ const forgetpass = async (req, res) => {
 const uploadTaskFile = async (req, res) => {
     const taskId = req.body.taskId;
 
+    console.log("Upload request received - Task ID:", taskId);
+    console.log("Allowed tasks:", Array.from(ALLOWED_TASKS));
+    console.log("Task ID in allowed set:", ALLOWED_TASKS.has(taskId));
+
     try {
+
         if (!taskId || !ALLOWED_TASKS.has(taskId)) {
+            console.error("Invalid task ID:", taskId);
             if (req.file && fs.existsSync(req.file.path)) {
                 fs.unlinkSync(req.file.path);
             }
@@ -459,10 +546,17 @@ const uploadTaskFile = async (req, res) => {
             filePath: storedPath,
             originalFileName: req.file.originalname,
             uploadDate: new Date(),
-            fileSize: req.file.size
+            fileSize: req.file.size,
+            status: "submitted",
+            marks: 0  // Default marks set to 0
         };
 
+        // Mark taskSubmissions as modified since it's a Mixed type
+        user.markModified('taskSubmissions');
         await user.save();
+        
+        console.log("File uploaded successfully for task:", taskId);
+        console.log("User taskSubmissions keys:", Object.keys(user.taskSubmissions));
 
         res.json({
             success: true,
@@ -488,16 +582,27 @@ const getTaskSubmission = async (req, res) => {
         }
 
         const user = await userModel.findById(req.user.userid);
+        if (!user) {
+            return res.status(404).json({ success: false, message: "User not found." });
+        }
+        
         const taskSubmission = user?.taskSubmissions?.[taskId];
 
         if (!taskSubmission || !taskSubmission.filePath) {
             return res.status(404).json({ success: false, message: "No submission found for this task." });
         }
 
+        // Ensure marks and status are included in response
+        const submissionData = {
+            ...taskSubmission,
+            marks: taskSubmission.marks !== undefined ? taskSubmission.marks : 0,
+            status: taskSubmission.status || "submitted"
+        };
+
         res.json({
             success: true,
             taskId,
-            submission: taskSubmission
+            submission: submissionData
         });
     } catch (error) {
         console.error("Error fetching submission:", error);
@@ -547,6 +652,185 @@ const logout = (req, res) => {
     res.redirect("/");
 }
 
+// Public leaderboard data (JSON)
+const getLeaderboardData = async (req, res) => {
+    try {
+        const users = await userModel.find({});
+
+        const leaderboard = users.map(user => {
+            const submissions = user.taskSubmissions || {};
+            let totalMarks = 0;
+
+            Object.values(submissions).forEach(submission => {
+                if (submission && typeof submission.marks === "number") {
+                    totalMarks += submission.marks;
+                }
+            });
+
+            return {
+                teamName: user.teamname || "N/A",
+                city: user.city || "N/A",
+                necId: user.email || "", // fallback identifier
+                track: user.trackType || "Team",
+                totalMarks
+            };
+        }).filter(entry => entry.totalMarks > 0);
+
+        // Sort by marks (desc) and assign rank
+        leaderboard.sort((a, b) => b.totalMarks - a.totalMarks);
+        leaderboard.forEach((entry, index) => {
+            entry.rank = index + 1;
+        });
+
+        res.json({
+            success: true,
+            leaderboard
+        });
+    } catch (error) {
+        console.error("Error building leaderboard:", error);
+        res.status(500).json({
+            success: false,
+            message: "Error building leaderboard",
+            error: error.message
+        });
+    }
+};
+
+// Public leaderboard page
+const leaderboardPage = (req, res) => {
+    res.render("leaderboard");
+};
+
+// Admin Panel Routes
+const adminPanel = (req, res) => {
+    res.render("adminpanel");
+}
+
+// Get all submissions for admin panel
+const getAdminSubmissions = async (req, res) => {
+    try {
+        const users = await userModel.find({});
+        const submissions = [];
+
+        users.forEach(user => {
+            if (user.taskSubmissions && typeof user.taskSubmissions === 'object') {
+                Object.keys(user.taskSubmissions).forEach(taskId => {
+                    const submission = user.taskSubmissions[taskId];
+                    if (submission && submission.filePath) {
+                        console.log("Found submission - Task ID:", taskId, "Team:", user.teamname);
+                        submissions.push({
+                            userId: user._id.toString(),
+                            teamName: user.teamname || 'N/A',
+                            taskId: taskId,
+                            fileName: submission.fileName,
+                            filePath: submission.filePath,
+                            originalFileName: submission.originalFileName,
+                            uploadDate: submission.uploadDate,
+                            fileSize: submission.fileSize,
+                            status: submission.status || 'submitted',
+                            marks: submission.marks
+                        });
+                    }
+                });
+            }
+        });
+        
+        console.log("Total submissions found:", submissions.length);
+        console.log("Submission task IDs:", submissions.map(s => s.taskId));
+
+        // Sort by upload date (newest first)
+        submissions.sort((a, b) => {
+            const dateA = new Date(a.uploadDate);
+            const dateB = new Date(b.uploadDate);
+            return dateB - dateA;
+        });
+
+        res.json({
+            success: true,
+            submissions: submissions
+        });
+    } catch (error) {
+        console.error("Error fetching admin submissions:", error);
+        res.status(500).json({
+            success: false,
+            message: "Error fetching submissions",
+            error: error.message
+        });
+    }
+}
+
+// Update marks and status for a submission
+const updateMarks = async (req, res) => {
+    try {
+        const { userId, taskId, marks } = req.body;
+
+        if (!userId || !taskId) {
+            return res.status(400).json({
+                success: false,
+                message: "User ID and Task ID are required"
+            });
+        }
+
+        if (marks === undefined || marks === null || marks === '') {
+            return res.status(400).json({
+                success: false,
+                message: "Marks are required"
+            });
+        }
+
+        const marksNum = parseFloat(marks);
+        if (isNaN(marksNum) || marksNum < 0 || marksNum > 200) {
+            return res.status(400).json({
+                success: false,
+                message: "Marks must be a number between 0 and 200"
+            });
+        }
+
+        const user = await userModel.findById(userId);
+        if (!user) {
+            return res.status(404).json({
+                success: false,
+                message: "User not found"
+            });
+        }
+
+        if (!user.taskSubmissions || !user.taskSubmissions[taskId]) {
+            return res.status(404).json({
+                success: false,
+                message: "Submission not found"
+            });
+        }
+
+        // Update marks and status
+        // Ensure taskSubmissions object exists
+        if (!user.taskSubmissions) {
+            user.taskSubmissions = {};
+        }
+        if (!user.taskSubmissions[taskId]) {
+            user.taskSubmissions[taskId] = {};
+        }
+        
+        user.taskSubmissions[taskId].marks = marksNum;
+        user.taskSubmissions[taskId].status = "checked";
+
+        // Mark the taskSubmissions as modified to ensure it's saved
+        user.markModified('taskSubmissions');
+        await user.save();
+
+        res.json({
+            success: true,
+            message: "Marks updated successfully",
+            submission: user.taskSubmissions[taskId]
+        });
+    } catch (error) {
+        console.error("Error updating marks:", error);
+        res.status(500).json({
+            success: false,
+            message: "Error updating marks",
+            error: error.message
+        });
+    }
+}
 
 
 
@@ -556,4 +840,44 @@ const logout = (req, res) => {
 
 
 
-module.exports = { forgetpass,forgetpassword, taskfourpointwo, taskfourpointone, tasktwopointfour, taskthreepointhree, taskthreepointwo, taskthreepointone, tasktwopointhree, tasktwopointwo, task2point1, task3, index, task2, task1, signup, ragister, home, loginuser, login, solotask, logout, teamtrack, mentor, associate, createteam, addmember, createMember, uploadTaskFile, getTaskSubmission, deleteTaskSubmission }
+
+module.exports = {
+    admin,
+    adminlogin,
+    adminPanel,
+    getAdminSubmissions,
+    updateMarks,
+    forgetpassword,
+    forgetpass,
+    taskfourpointwo,
+    taskfourpointone,
+    tasktwopointfour,
+    taskthreepointhree,
+    taskthreepointwo,
+    taskthreepointone,
+    tasktwopointhree,
+    tasktwopointwo,
+    task2point1,
+    task3,
+    index,
+    task2,
+    task1,
+    signup,
+    ragister,
+    home,
+    loginuser,
+    login,
+    solotask,
+    logout,
+    teamtrack,
+    mentor,
+    associate,
+    createteam,
+    addmember,
+    createMember,
+    uploadTaskFile,
+    getTaskSubmission,
+    deleteTaskSubmission,
+    getLeaderboardData,
+    leaderboardPage
+}

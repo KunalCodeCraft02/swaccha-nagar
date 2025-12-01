@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.7.0/fonts/remixicon.css" rel="stylesheet" />
+    <title>Leaderboard</title>
+    <style>
+        body {
+            background: #020617;
+            color: #e5e7eb;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        }
+        .gradient-text {
+            background: linear-gradient(to right, #6366f1, #a855f7);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        .table-wrapper {
+            border-radius: 1.5rem;
+            border: 1px solid rgba(148, 163, 184, 0.25);
+            background: radial-gradient(circle at top left, rgba(79, 70, 229, 0.16), transparent 55%),
+                        radial-gradient(circle at bottom right, rgba(14, 165, 233, 0.16), transparent 55%),
+                        rgba(15, 23, 42, 0.95);
+            box-shadow:
+                0 25px 50px -12px rgba(15, 23, 42, 0.9),
+                0 0 0 1px rgba(15, 23, 42, 0.8);
+            overflow: hidden;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        thead tr {
+            background: rgba(15, 23, 42, 0.95);
+        }
+        th, td {
+            padding: 0.9rem 1.25rem;
+            text-align: left;
+        }
+        th {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: #9ca3af;
+            border-bottom: 1px solid rgba(55, 65, 81, 0.75);
+        }
+        tbody tr {
+            border-bottom: 1px solid rgba(31, 41, 55, 0.8);
+        }
+        tbody tr:nth-child(even) {
+            background: rgba(15, 23, 42, 0.6);
+        }
+        tbody tr:hover {
+            background: rgba(30, 64, 175, 0.55);
+            transition: background 150ms ease-out;
+        }
+        .rank-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 2.25rem;
+            padding: 0.2rem 0.55rem;
+            border-radius: 999px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            background: rgba(15, 23, 42, 0.9);
+            border: 1px solid rgba(148, 163, 184, 0.35);
+        }
+        .rank-1 {
+            background: linear-gradient(to right, #fde68a, #fbbf24);
+            color: #78350f;
+            border-color: transparent;
+        }
+        .rank-2 {
+            background: linear-gradient(to right, #e5e7eb, #9ca3af);
+            color: #111827;
+            border-color: transparent;
+        }
+        .rank-3 {
+            background: linear-gradient(to right, #fed7aa, #fb923c);
+            color: #7c2d12;
+            border-color: transparent;
+        }
+        .pill-city {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            padding: 0.25rem 0.65rem;
+            border-radius: 999px;
+            background: rgba(15, 23, 42, 0.85);
+            border: 1px solid rgba(55, 65, 81, 0.8);
+            font-size: 0.78rem;
+            color: #e5e7eb;
+        }
+        .pill-city i {
+            font-size: 0.9rem;
+            color: #38bdf8;
+        }
+        .pill-points {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            padding: 0.3rem 0.8rem;
+            border-radius: 999px;
+            background: rgba(22, 163, 74, 0.12);
+            border: 1px solid rgba(34, 197, 94, 0.4);
+            font-size: 0.86rem;
+            color: #bbf7d0;
+        }
+        .pill-points i {
+            color: #4ade80;
+        }
+        .team-name {
+            font-weight: 600;
+            letter-spacing: 0.01em;
+        }
+        .team-sub {
+            font-size: 0.75rem;
+            color: #9ca3af;
+        }
+        .badge-solo, .badge-team {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+            padding: 0.18rem 0.55rem;
+            border-radius: 999px;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+        .badge-solo {
+            background: rgba(59, 130, 246, 0.12);
+            color: #bfdbfe;
+            border: 1px solid rgba(59, 130, 246, 0.5);
+        }
+        .badge-team {
+            background: rgba(16, 185, 129, 0.12);
+            color: #a7f3d0;
+            border: 1px solid rgba(16, 185, 129, 0.5);
+        }
+        .pill-updated {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            padding: 0.25rem 0.6rem;
+            border-radius: 999px;
+            font-size: 0.75rem;
+            background: rgba(15, 23, 42, 0.9);
+            border: 1px solid rgba(55, 65, 81, 0.75);
+            color: #9ca3af;
+        }
+        .pill-updated i {
+            color: #22c55e;
+        }
+        .status-dot {
+            width: 0.4rem;
+            height: 0.4rem;
+            border-radius: 999px;
+            background: #22c55e;
+            box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.25);
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+    <div class="min-h-screen flex flex-col">
+        <!-- Header / Nav -->
+        <header class="border-b border-slate-800/80 bg-slate-950/90 backdrop-blur">
+            <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between gap-4">
+                <div class="flex items-center gap-2">
+                    <a href="/" class="flex items-center gap-2">
+                        <img src="/images/logo.png" alt="Logo" class="w-8 h-8 rounded-full border border-slate-700/70 bg-slate-900 object-cover">
+                        <div class="flex flex-col leading-tight">
+                            <span class="text-xs uppercase tracking-[0.18em] text-slate-400">Swachh Bharat Challenge</span>
+                            <span class="text-sm font-semibold text-slate-100">City Leaderboard</span>
+                        </div>
+                    </a>
+                </div>
+                <div class="flex items-center gap-2 text-xs sm:text-sm text-slate-400">
+                    <div class="pill-updated" id="lastUpdatedPill">
+                        <span class="status-dot"></span>
+                        <span id="lastUpdatedText">Updating...</span>
+                    </div>
+                    <a href="/solotask" class="hidden sm:inline-flex items-center gap-1 px-3 py-1 rounded-full border border-slate-700/80 text-xs text-slate-200 hover:border-slate-500 hover:bg-slate-900/80 transition">
+                        <i class="ri-user-line text-sky-400"></i>
+                        Solo Tasks
+                    </a>
+                    <a href="/teamtrack" class="hidden sm:inline-flex items-center gap-1 px-3 py-1 rounded-full border border-slate-700/80 text-xs text-slate-200 hover:border-slate-500 hover:bg-slate-900/80 transition">
+                        <i class="ri-group-line text-emerald-400"></i>
+                        Team Tasks
+                    </a>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main content -->
+        <main class="flex-1">
+            <div class="max-w-6xl mx-auto px-4 py-10">
+                <div class="flex items-center justify-between mb-6 gap-4">
+                    <div>
+                        <h1 class="text-3xl sm:text-4xl font-extrabold gradient-text tracking-tight">
+                            Leaderboard
+                        </h1>
+                        <p class="mt-2 text-sm sm:text-base text-slate-400 max-w-2xl">
+                            Live rankings based on total verified marks across all tasks. Visible to everyone &mdash; no login required.
+                        </p>
+                    </div>
+                    <div class="hidden sm:flex flex-col items-end gap-1 text-right">
+                        <span class="text-xs uppercase tracking-[0.18em] text-slate-500">Columns</span>
+                        <div class="flex items-center gap-2 text-[0.7rem] text-slate-300">
+                            <span class="pill-city">
+                                <i class="ri-map-pin-line"></i>
+                                City
+                            </span>
+                            <span class="pill-points">
+                                <i class="ri-star-smile-line"></i>
+                                Marks
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="table-wrapper">
+                    <div id="leaderboardLoading" class="flex items-center justify-center py-10 gap-3 text-slate-400 text-sm">
+                        <i class="ri-loader-4-line animate-spin text-xl text-indigo-400"></i>
+                        <span>Loading leaderboard...</span>
+                    </div>
+                    <div id="leaderboardEmpty" class="hidden py-10 text-center text-slate-400 text-sm">
+                        <i class="ri-file-list-3-line text-3xl mb-2 text-slate-500"></i>
+                        <p>No submissions have been graded yet.</p>
+                    </div>
+
+                    <table id="leaderboardTable" class="hidden">
+                        <thead>
+                            <tr>
+                                <th style="width: 10%;">City Rank</th>
+                                <th style="width: 55%;">Team</th>
+                                <th style="width: 35%; text-align: right;">Marks</th>
+                            </tr>
+                        </thead>
+                        <tbody id="leaderboardBody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        async function fetchLeaderboard() {
+            const loading = document.getElementById('leaderboardLoading');
+            const empty = document.getElementById('leaderboardEmpty');
+            const table = document.getElementById('leaderboardTable');
+            const tbody = document.getElementById('leaderboardBody');
+            const lastUpdatedText = document.getElementById('lastUpdatedText');
+
+            try {
+                const response = await fetch('/api/leaderboard');
+                const data = await response.json();
+
+                if (!response.ok || !data.success) {
+                    throw new Error(data.message || 'Failed to load leaderboard');
+                }
+
+                loading.classList.add('hidden');
+
+                const entries = data.leaderboard || [];
+
+                if (!entries.length) {
+                    empty.classList.remove('hidden');
+                    table.classList.add('hidden');
+                    return;
+                }
+
+                empty.classList.add('hidden');
+                table.classList.remove('hidden');
+                tbody.innerHTML = '';
+
+                entries.forEach((entry, index) => {
+                    const tr = document.createElement('tr');
+                    const rankClass = index === 0 ? 'rank-1' : index === 1 ? 'rank-2' : index === 2 ? 'rank-3' : '';
+
+                    const safeTeam = entry.teamName || 'N/A';
+                    const safeMarks = typeof entry.totalMarks === 'number' ? entry.totalMarks : 0;
+
+                    tr.innerHTML = `
+                        <td>
+                            <span class="rank-badge ${rankClass}">${entry.rank}</span>
+                        </td>
+                        <td>
+                            <div class="flex flex-col">
+                                <span class="team-name">${safeTeam}</span>
+                                ${entry.necId ? `<span class="team-sub">SNNC Email: ${entry.necId}</span>` : ''}
+                            </div>
+                        </td>
+                        <td style="text-align: right;">
+                            <span class="pill-points">
+                                <i class="ri-star-smile-line"></i>
+                                ${safeMarks}
+                            </span>
+                        </td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+
+                const now = new Date();
+                lastUpdatedText.textContent = 'Updated ' + now.toLocaleTimeString();
+            } catch (error) {
+                console.error('Error loading leaderboard:', error);
+                loading.classList.add('hidden');
+                empty.classList.remove('hidden');
+                empty.textContent = 'Unable to load leaderboard. Please try again later.';
+            }
+        }
+
+        // Initial load and auto-refresh every 30 seconds
+        fetchLeaderboard();
+        setInterval(fetchLeaderboard, 30000);
+    </script>
+</body>
+</html>
+
+
