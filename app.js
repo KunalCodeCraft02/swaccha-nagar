@@ -137,6 +137,10 @@ app.post("/debug-upload", handleTaskUpload, uploadTaskFile);
 
 
 
+<<<<<<< HEAD
 app.listen(4000, () => {
+=======
+app.listen(10000 , () => {
+>>>>>>> f8e9961eb8b372bc37fe124a7bdb915c6747ace8
     console.log("Server is running on port 3000");
 });
